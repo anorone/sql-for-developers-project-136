@@ -19,6 +19,13 @@ CREATE TYPE program_completion_statuses AS ENUM (
     'cancelled'
 );
 
+CREATE TYPE blog_statuses AS ENUM (
+    'created',
+    'in moderation',
+    'published',
+    'archived'
+);
+
 CREATE TABLE enrollments (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id BIGINT REFERENCES users(id) NOT NULL,
@@ -82,6 +89,16 @@ CREATE TABLE users (
     )
 );
 
+CREATE TABLE blogs (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id BIGINT REFERENCES users(id) NOT NULL,
+    heading VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    blog_status blog_statuses NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
 CREATE TABLE programs (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     program_name VARCHAR(255) NOT NULL,
@@ -136,6 +153,14 @@ CREATE TABLE exercises (
     lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
     exercise_name VARCHAR(255) NOT NULL,
     exercise_url VARCHAR(1023) UNIQUE NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE discussions (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
+    comments JSONB NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
