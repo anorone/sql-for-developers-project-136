@@ -122,6 +122,24 @@ CREATE TABLE lessons (
     is_deleted BOOLEAN DEFAULT false
 );
 
+CREATE TABLE quizzes (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
+    quizz_name VARCHAR(255) NOT NULL,
+    content JSONB NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE exercises (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
+    exercise_name VARCHAR(255) NOT NULL,
+    exercise_url VARCHAR(1023) UNIQUE NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
 CREATE TABLE program_modules (
     program_id BIGINT REFERENCES programs(id),
     module_id BIGINT REFERENCES modules(id),
