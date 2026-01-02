@@ -92,10 +92,10 @@ CREATE TABLE lessons (
     name VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     video_url VARCHAR(255),
-    position INTEGER NOT NULL,
+    position INTEGER,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-    course_id BIGINT REFERENCES courses(id) NOT NULL,
+    course_id BIGINT REFERENCES courses(id),
     deleted_at TIMESTAMP
 );
 
