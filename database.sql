@@ -26,46 +26,6 @@ CREATE TYPE blog_statuses AS ENUM (
     'archived'
 );
 
-CREATE TABLE enrollments (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id BIGINT REFERENCES users(id) NOT NULL,
-    program_id BIGINT REFERENCES programs(id) NOT NULL,
-    enrollment_status enrollment_statuses NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
-);
-
-CREATE TABLE payments (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    enrollment_id BIGINT REFERENCES enrollments(id) NOT NULL,
-    sum NUMERIC NOT NULL,
-    payment_status payment_statuses NOT NULL,
-    paid_at TIMESTAMP,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
-);
-
-CREATE TABLE program_completions (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id BIGINT REFERENCES users(id) NOT NULL,
-    program_id BIGINT REFERENCES programs(id) NOT NULL,
-    program_completion_status program_completion_statuses NOT NULL,
-    started_at TIMESTAMP,
-    finished_at TIMESTAMP,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
-);
-
-CREATE TABLE certificates (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id BIGINT REFERENCES users(id) NOT NULL,
-    program_id BIGINT REFERENCES programs(id) NOT NULL,
-    certificate_url VARCHAR(1023) UNIQUE NOT NULL,
-    issued_at TIMESTAMP NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
-);
-
 CREATE TABLE teaching_groups (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     slug VARCHAR(255) UNIQUE NOT NULL,
@@ -161,6 +121,46 @@ CREATE TABLE discussions (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
     comments JSONB NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE enrollments (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id BIGINT REFERENCES users(id) NOT NULL,
+    program_id BIGINT REFERENCES programs(id) NOT NULL,
+    enrollment_status enrollment_statuses NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE payments (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    enrollment_id BIGINT REFERENCES enrollments(id) NOT NULL,
+    sum NUMERIC NOT NULL,
+    payment_status payment_statuses NOT NULL,
+    paid_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE program_completions (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id BIGINT REFERENCES users(id) NOT NULL,
+    program_id BIGINT REFERENCES programs(id) NOT NULL,
+    program_completion_status program_completion_statuses NOT NULL,
+    started_at TIMESTAMP,
+    finished_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE certificates (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id BIGINT REFERENCES users(id) NOT NULL,
+    program_id BIGINT REFERENCES programs(id) NOT NULL,
+    certificate_url VARCHAR(1023) UNIQUE NOT NULL,
+    issued_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
