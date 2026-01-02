@@ -35,33 +35,34 @@ CREATE TABLE teaching_groups (
 
 CREATE TABLE users (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    nickname VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE,
     password_hash VARCHAR(511) NOT NULL,
-    user_type VARCHAR(255) NOT NULL,
+    role VARCHAR(255) NOT NULL,
     teaching_group_id BIGINT REFERENCES teaching_groups(id),
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
+    deleted_at TIMESTAMP,
     CHECK (
-        user_type = 'Student' OR
-        user_type = 'Teacher' OR
-        user_type = 'Admin'
+        role = 'Student' OR
+        role = 'Teacher' OR
+        role = 'Admin'
     )
 );
 
 CREATE TABLE blogs (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id BIGINT REFERENCES users(id) NOT NULL,
-    heading VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
-    blog_status blog_statuses NOT NULL,
+    status blog_statuses NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
 
 CREATE TABLE programs (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    program_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     price NUMERIC NOT NULL,
     program_type VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
@@ -71,38 +72,38 @@ CREATE TABLE programs (
 
 CREATE TABLE modules (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    module_name VARCHAR(255) NOT NULL,
-    content TEXT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-    is_deleted BOOLEAN DEFAULT false
+    deleted_at TIMESTAMP
 );
 
 CREATE TABLE courses (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    course_name VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-    is_deleted BOOLEAN DEFAULT false
+    deleted_at TIMESTAMP
 );
 
 CREATE TABLE lessons (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    lesson_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     video_url VARCHAR(255),
-    sort_order INTEGER NOT NULL,
+    position INTEGER NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     course_id BIGINT REFERENCES courses(id) NOT NULL,
-    is_deleted BOOLEAN DEFAULT false
+    deleted_at TIMESTAMP
 );
 
 CREATE TABLE quizzes (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
-    quizz_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     content JSONB NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
@@ -111,8 +112,8 @@ CREATE TABLE quizzes (
 CREATE TABLE exercises (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
-    exercise_name VARCHAR(255) NOT NULL,
-    exercise_url VARCHAR(1023) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    url VARCHAR(1023) UNIQUE NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
@@ -120,7 +121,8 @@ CREATE TABLE exercises (
 CREATE TABLE discussions (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
-    comments JSONB NOT NULL,
+    user_id BIGINT REFERENCES users(id) NOT NULL,
+    text JSONB NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
@@ -129,7 +131,7 @@ CREATE TABLE enrollments (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id BIGINT REFERENCES users(id) NOT NULL,
     program_id BIGINT REFERENCES programs(id) NOT NULL,
-    enrollment_status enrollment_statuses NOT NULL,
+    status enrollment_statuses NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
@@ -137,8 +139,8 @@ CREATE TABLE enrollments (
 CREATE TABLE payments (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     enrollment_id BIGINT REFERENCES enrollments(id) NOT NULL,
-    sum NUMERIC NOT NULL,
-    payment_status payment_statuses NOT NULL,
+    amount NUMERIC NOT NULL,
+    status payment_statuses NOT NULL,
     paid_at TIMESTAMP,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
@@ -148,9 +150,9 @@ CREATE TABLE program_completions (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id BIGINT REFERENCES users(id) NOT NULL,
     program_id BIGINT REFERENCES programs(id) NOT NULL,
-    program_completion_status program_completion_statuses NOT NULL,
+    status program_completion_statuses NOT NULL,
     started_at TIMESTAMP,
-    finished_at TIMESTAMP,
+    completed_at TIMESTAMP,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
@@ -159,7 +161,7 @@ CREATE TABLE certificates (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id BIGINT REFERENCES users(id) NOT NULL,
     program_id BIGINT REFERENCES programs(id) NOT NULL,
-    certificate_url VARCHAR(1023) UNIQUE NOT NULL,
+    url VARCHAR(1023) UNIQUE NOT NULL,
     issued_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
