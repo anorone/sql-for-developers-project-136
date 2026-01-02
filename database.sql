@@ -76,10 +76,10 @@ CREATE TABLE teaching_groups (
 CREATE TABLE users (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     nickname VARCHAR(255) UNIQUE NOT NULL,
-    email: VARCHAR(255) UNIQUE,
-    password_hash: VARCHAR(511) NOT NULL,
-    user_type: VARCHAR(255) NOT NULL,
-    teaching_group_id: BIGINT REFERENCES teaching_groups(id),
+    email VARCHAR(255) UNIQUE,
+    password_hash VARCHAR(511) NOT NULL,
+    user_type VARCHAR(255) NOT NULL,
+    teaching_group_id BIGINT REFERENCES teaching_groups(id),
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     CHECK (
@@ -103,7 +103,7 @@ CREATE TABLE programs (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     program_name VARCHAR(255) NOT NULL,
     price NUMERIC NOT NULL,
-    program_type: VARCHAR(255) NOT NULL,
+    program_type VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     CHECK (program_type = 'intensive' OR  program_type = 'profession')
