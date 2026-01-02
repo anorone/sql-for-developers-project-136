@@ -66,8 +66,7 @@ CREATE TABLE programs (
     price NUMERIC NOT NULL,
     program_type VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
-    CHECK (program_type = 'intensive' OR  program_type = 'profession')
+    updated_at TIMESTAMP NOT NULL
 );
 
 CREATE TABLE modules (
