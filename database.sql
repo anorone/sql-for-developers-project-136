@@ -101,7 +101,7 @@ CREATE TABLE lessons (
 
 CREATE TABLE quizzes (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
+    lesson_id BIGINT REFERENCES lessons(id) NOT NULL,
     name VARCHAR(255) NOT NULL,
     content JSONB NOT NULL,
     created_at TIMESTAMP NOT NULL,
