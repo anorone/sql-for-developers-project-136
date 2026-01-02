@@ -173,7 +173,7 @@ CREATE TABLE program_modules (
     PRIMARY KEY (program_id, module_id)
 );
 
-CREATE TABLE module_courses (
+CREATE TABLE course_modules (
     module_id BIGINT REFERENCES modules(id),
     course_id BIGINT REFERENCES courses(id),
     PRIMARY KEY (module_id, course_id)
