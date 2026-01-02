@@ -119,7 +119,7 @@ CREATE TABLE exercises (
 
 CREATE TABLE discussions (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    lesson_id BIGINT REFERENCES lessons(id) UNIQUE NOT NULL,
+    lesson_id BIGINT REFERENCES lessons(id) NOT NULL,
     user_id BIGINT REFERENCES users(id) NOT NULL,
     text JSONB NOT NULL,
     created_at TIMESTAMP NOT NULL,
